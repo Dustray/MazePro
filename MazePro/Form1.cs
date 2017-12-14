@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace MazePro
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Random rand = new Random(); //随机数对象的实例化。不要再方法中实例化多个Random，原因见msdn
         PictureBox[,] map;  //存放pictureBox，迷宫格子
@@ -21,17 +21,19 @@ namespace MazePro
         int pointY = 0; // 当前所在的位置-列
         List<Image> PathImageList = new List<Image>();  //橘黄色的背景图片
         List<Image> ImageList = new List<Image>();      //白色背景的个图片
-        private static int SIDE_LENGTH = 2;
+        private static int SIDE_LENGTH = 6;
         int width = SIDE_LENGTH;    //迷宫的宽度-列数
         int height = SIDE_LENGTH;   //迷宫的高度-行数
 
+        private static int processTotal = SIDE_LENGTH * SIDE_LENGTH;
+        int processNow = 0;
         int chessLength = 20;
         PictureBox tmpBox;
         MyStack<BlockAttribute> stack = new MyStack<BlockAttribute>();
 
         //NewStack<int[]> newStack = new NewStack<int[]>(100);
         //Stack<int[]> sysStack = new Stack<int[]>(100);
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             chessLength = SIDE_LENGTH > 10 ? 400 / SIDE_LENGTH : 40;
@@ -41,6 +43,7 @@ namespace MazePro
         private void Form1_Load(object sender, EventArgs e)
         {
             initSource();
+            showLevel.Text = "" + SIDE_LENGTH;
         }
 
         private void initSource()
@@ -86,15 +89,6 @@ namespace MazePro
             PathImageList.Add(ch1.getCheckered_15());
 
 
-            if (numMap != null)
-            {
-                numMap.Initialize();
-            }
-            if (path != null)
-            {
-                path.Initialize();
-            }
-
         }
 
         //按钮-创建迷宫
@@ -105,30 +99,26 @@ namespace MazePro
         private void startCreateMap()
         {
             clearMaze();//格式化资源
-
             //btn_createMap.Enabled = false;
             path = new int[height, width];//寻路的数组
             map = new PictureBox[height, width];//格子图片数组
             numMap = new int[height, width];//格子数字状态
             drawCheckerboar();
+
             CreateNumMap((int)height / 2, (int)width / 2, 0);//在迷宫的中间开始遍历
-            //CreateNumMap(0, 0, 0);
+            mapCreateProgressBar.Value = 100;
             CreateMap();
+            mapCreateProgressBar.Value = 0;
         }
 
         //绘制pictureBox，数组数据初始化
         public void drawCheckerboar()
         {
-
             int currentPoint = 0;
             int initX = 10;
             int initY = 10;
             int _x = initX;
             int _y = initY;
-
-
-
-            //tmpBox.Controls.Clear();
 
             for (int x = 0; x < height * width; x++)
             {
@@ -156,7 +146,7 @@ namespace MazePro
             }
         }
 
-        //创建迷宫状态数据
+        //创建迷宫状态二维数组
         private void CreateNumMap(int m, int n, int o)
         {
             List<int> directs = new List<int> { 0, 1, 2, 3 };   //存储未用的方向。0123分别表示上-右-下-左
@@ -228,6 +218,11 @@ namespace MazePro
                 {
                     last = t ^ last;    //异或操作
                     numMap[m, n] = last;
+
+                    //process_control_begin
+                    changeProcess();
+                    //process_control_end
+
                     //test-begin
                     string ss = "";
                     for (int f = 0; f < height; f++)
@@ -242,7 +237,16 @@ namespace MazePro
             }
         }
 
-        //生成迷宫
+        private void changeProcess()
+        {
+            processNow++;
+            float tmp = 100 * ((float)processNow / processTotal);
+            if (tmp < 100)
+                mapCreateProgressBar.Value = (int)tmp;
+            //Console.WriteLine((int)tmp);
+
+        }
+        //根据构造的二维数组生成迷宫
         private void CreateMap()
         {
             numMap[0, 0] = numMap[0, 0] ^ 8;//对8与操作，打开一个缺口，作为进入口。
@@ -320,6 +324,7 @@ namespace MazePro
         //重写键盘事件,用于走迷宫
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+
             if (keyData == (Keys.Control | Keys.Z))
             {
                 if (stack.StackEmpty())
@@ -327,6 +332,11 @@ namespace MazePro
                     MessageBox.Show("无法撤销");
                     return false;
                 }
+            }
+            else if (keyData == Keys.Enter)
+            {
+
+                return base.ProcessCmdKey(ref msg, keyData);
             }
             if (numMap != null)
             {
@@ -385,9 +395,8 @@ namespace MazePro
                         BlockAttribute block = stack.Pop();
                         map[pointX, pointY].Image = ImageList[numMap[pointX, pointY]];//将未被踩的贴到原位置
                         map[block._X, block._Y].Image = PathImageList[numMap[block._X, block._Y]];//将已被踩的贴到新的位置
-                        status_lb_x.Text = block._X.ToString();
-                        status_lb_y.Text = block._Y.ToString();
-                        pointX = block._X;
+
+                        pointX = block._X;//重新设置坐标
                         pointY = block._Y;
                     }
                     else
@@ -396,17 +405,17 @@ namespace MazePro
                         stack.Push(new BlockAttribute(pointX, pointY, direct));//将原位置入栈
                         map[pointX, pointY].Image = ImageList[numMap[pointX, pointY]];//将未被踩的贴到原位置
                         map[m, n].Image = PathImageList[numMap[m, n]];//将已被踩的贴到新的位置
-                        status_lb_x.Text = m.ToString();
-                        status_lb_y.Text = n.ToString();
+
                         pointX = m;
                         pointY = n;
                     }
-
+                    status_lb_x.Text = "" + pointX;//打印坐标
+                    status_lb_y.Text = "" + pointY;
 
                     if (m == height - 1 && n == width - 1)
                     {
-                        MessageBox.Show("win!");
-                        if(winAndNewGame.Checked)
+                        MessageBox.Show("通过!");
+                        if (winAndNewGame.Checked)
                             startCreateMap();
                     }
                     return true;
@@ -427,13 +436,16 @@ namespace MazePro
         {
             SIDE_LENGTH = sideLengthBar.Value;
             showLevel.Text = "" + SIDE_LENGTH;
+        }
+        private void clearMaze()
+        {
+
+            processTotal = SIDE_LENGTH * SIDE_LENGTH;
+            processNow = 0;
             width = SIDE_LENGTH;    //迷宫的宽度-列数
             height = SIDE_LENGTH;   //迷宫的高度-行数
             chessLength = SIDE_LENGTH > 10 ? 400 / SIDE_LENGTH : 40;
             initSource();
-        }
-        private void clearMaze()
-        {
 
             //删除当前图层
             mazeBox.Controls.Clear();
