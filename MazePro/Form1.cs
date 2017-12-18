@@ -19,20 +19,18 @@ namespace MazePro
         int[,] path;    //保存寻路的数组
         int pointX = 0; // 当前所在的位置-行，用于玩游戏时保存玩家所在的位置
         int pointY = 0; // 当前所在的位置-列
-        List<Image> PathImageList = new List<Image>();  //橘黄色的背景图片
-        List<Image> ImageList = new List<Image>();      //白色背景的个图片
-        private static int SIDE_LENGTH = 6;
+        List<Image> PathImageList = new List<Image>();  //带蓝色脚步背景方格图片
+        List<Image> ImageList = new List<Image>();      //白色背景方格图片
+        private static int SIDE_LENGTH = 6;//默认边长
         int width = SIDE_LENGTH;    //迷宫的宽度-列数
         int height = SIDE_LENGTH;   //迷宫的高度-行数
 
-        private static int processTotal = SIDE_LENGTH * SIDE_LENGTH;
-        int processNow = 0;
-        int chessLength = 20;
-        PictureBox tmpBox;
+        private static int processTotal = SIDE_LENGTH * SIDE_LENGTH;//进度条总量
+        int processNow = 0;//进度条当前
+        int chessLength = 20;//单个方格长度
+        PictureBox tmpBox;//合成后图片
         MyStack<BlockAttribute> stack = new MyStack<BlockAttribute>();
-
-        //NewStack<int[]> newStack = new NewStack<int[]>(100);
-        //Stack<int[]> sysStack = new Stack<int[]>(100);
+        
         public MainForm()
         {
             InitializeComponent();
@@ -42,7 +40,7 @@ namespace MazePro
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            initSource();
+            initSource();//加载方格资源
             showLevel.Text = "" + SIDE_LENGTH;
         }
 
@@ -87,8 +85,6 @@ namespace MazePro
             PathImageList.Add(ch1.getCheckered_13());
             PathImageList.Add(ch1.getCheckered_14());
             PathImageList.Add(ch1.getCheckered_15());
-
-
         }
 
         //按钮-创建迷宫
@@ -105,8 +101,8 @@ namespace MazePro
             numMap = new int[height, width];//格子数字状态
             drawCheckerboar();
 
-            CreateNumMap((int)height / 2, (int)width / 2, 0);//在迷宫的中间开始遍历
-            mapCreateProgressBar.Value = 100;
+            //CreateNumMap((int)height / 2, (int)width / 2, 0);//在迷宫的中间开始遍历（树的递归生成）
+            CreateNumMap(0, 0, 0);//在迷宫的左上角开始遍历（树的递归生成）
             CreateMap();
             mapCreateProgressBar.Value = 0;
         }
@@ -138,7 +134,7 @@ namespace MazePro
                 tmpBox.Width = chessLength;
                 tmpBox.Height = chessLength;
                 map[(int)currentPoint / width, currentPoint % width] = tmpBox;
-                numMap[(int)currentPoint / width, currentPoint % width] = -1;   //-1表示未遍历过
+                numMap[(int)currentPoint / width, currentPoint % width] = -1;   //初始化为-1，表示未遍历过
                 mazeBox.Controls.Add(tmpBox);
                 tmpBox = null;
 
@@ -146,26 +142,32 @@ namespace MazePro
             }
         }
 
-        //创建迷宫状态二维数组
+        /**创建迷宫状态二维数组
+         * 
+         * 利用递归随机向四周扩展空间，若某一格空间未被访问过且不为墙，则给这一格分配
+         * 
+         * 判断一格的某个方向是否可通过，需要对数据对某个方向进行与操作，结果为0则可以通过
+         */
         private void CreateNumMap(int m, int n, int o)
         {
-            List<int> directs = new List<int> { 0, 1, 2, 3 };   //存储未用的方向。0123分别表示上-右-下-左
+            List<int> directs = new List<int> { 0, 1, 2, 3 };   //当前格子存储未用的方向。0123分别表示上-右-下-左
             int last = 0;
             switch (o)
             {
-                case 1:
-                    last = 4;
+                case 1://0001 左面可走
+                    last = 4;//0100 右面可走
                     break;
-                case 2:
-                    last = 8;
+                case 2://0010 下面可走
+                    last = 8;//1000 上面可走
                     break;
-                case 4:
-                    last = 1;
+                case 4://0100 右面可走
+                    last = 1;//0001 左面可走
                     break;
-                case 8:
-                    last = 2;
+                case 8://1000 上面可走
+                    last = 2;//0010 下面可走
                     break;
             }
+            //将格子信息存储到当前位置
             numMap[m, n] = last;
 
             //test-begin
@@ -190,25 +192,25 @@ namespace MazePro
             //test-end
             while (directs.Count > 0)
             {
-                int x = m;
-                int y = n;
-                int d = rand.Next(directs.Count);
+                int x = m;//当前位置横坐标
+                int y = n;//当前位置纵坐标
+                int d = rand.Next(directs.Count);//生成当前方格可用方向的随机数（0~4）
                 int t = 0;
                 switch (directs[d])
                 {
-                    case 0:
+                    case 0://向上生成
                         x--;
                         t = 8;
                         break;
-                    case 1:
+                    case 1://向右生成
                         y++;
-                        t = 4;
+                        t = 4   ;
                         break;
-                    case 2:
+                    case 2://向下生成
                         x++;
                         t = 2;
                         break;
-                    case 3:
+                    case 3://向左生成
                         y--;
                         t = 1;
                         break;
@@ -216,10 +218,10 @@ namespace MazePro
                 directs.RemoveAt(d);    //删除使用过的方向
                 if (x < height && y < width && x >= 0 && y >= 0 && numMap[x, y] == -1)//没有超出数组边界，格子未被遍历过，则为true
                 {
-                    last = t ^ last;    //异或操作
+                    last = t ^ last;    //进行开口操作（异或操作）：t=8为向上开口
                     numMap[m, n] = last;
 
-                    //process_control_begin
+                    //process_control_begin 进度条
                     changeProcess();
                     //process_control_end
 
@@ -237,6 +239,7 @@ namespace MazePro
             }
         }
 
+        //操作进度条
         private void changeProcess()
         {
             processNow++;
@@ -244,13 +247,12 @@ namespace MazePro
             if (tmp < 100)
                 mapCreateProgressBar.Value = (int)tmp;
             //Console.WriteLine((int)tmp);
-
         }
         //根据构造的二维数组生成迷宫
         private void CreateMap()
         {
             numMap[0, 0] = numMap[0, 0] ^ 8;//对8与操作，打开一个缺口，作为进入口。
-            numMap[height - 1, width - 1] = numMap[height - 1, width - 1] ^ 2;//打开一个缺口作为出去口。
+            numMap[height - 1, width - 1] = numMap[height - 1, width - 1] ^ 2;//打开一个缺口作为出口。
             for (int m = 0; m < height; m++)
             {
                 for (int n = 0; n < width; n++)
@@ -260,7 +262,7 @@ namespace MazePro
                     map[m, n].Image = ImageList[x];
                 }
             }
-            map[0, 0].Image = PathImageList[numMap[0, 0]]; //给第一格子换成橘黄色的背景
+            map[0, 0].Image = PathImageList[numMap[0, 0]]; //给第一格子换成第一步
         }
 
         //寻路
@@ -281,7 +283,7 @@ namespace MazePro
             }
             else
             {
-                for (int i = 0; i <= 3; i++)
+                for (int i = 0; i <= 3; i++)//上右下左
                 {
                     int m = x;
                     int n = y;
@@ -305,7 +307,7 @@ namespace MazePro
                             direct = 1;
                             break;
                     }
-                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[x, y] & direct) != 0 && path[m, n] == 0)
+                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[x, y] & direct) != 0 && path[m, n] == 0)//不为墙且未走过
                     {
                         path[x, y] = 1;
                         Pathfinding(m, n);
