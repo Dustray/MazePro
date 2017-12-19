@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -30,7 +31,9 @@ namespace MazePro
         int chessLength = 20;//单个方格长度
         PictureBox tmpBox;//合成后图片
         MyStack<BlockAttribute> stack = new MyStack<BlockAttribute>();
-        
+        MyStack<OneStepAttribute> searchStack = new MyStack<OneStepAttribute>();
+        bool isSearchOver = true;
+
         public MainForm()
         {
             InitializeComponent();
@@ -204,7 +207,7 @@ namespace MazePro
                         break;
                     case 1://向右生成
                         y++;
-                        t = 4   ;
+                        t = 4;
                         break;
                     case 2://向下生成
                         x++;
@@ -265,7 +268,7 @@ namespace MazePro
             map[0, 0].Image = PathImageList[numMap[0, 0]]; //给第一格子换成第一步
         }
 
-        //寻路
+        //立即寻路
         private void Pathfinding(int x, int y)
         {
             if (x == height - 1 && y == width - 1)
@@ -316,7 +319,173 @@ namespace MazePro
                 }
             }
         }
+        //单步寻路
+        private void PathfindingByOneStep()
+        {
 
+            Thread.Sleep(100);
+            if (numMap != null)
+            {
+                /*
+                for (int i = 0; i <= 3; i++)//上右下左
+                {
+                    int m = x;
+                    int n = y;
+                    int direct = 0;
+                    switch (i)
+                    {
+                        case 0:
+                            m--;
+                            direct = 8;
+                            break;
+                        case 1:
+                            n++;
+                            direct = 4;
+                            break;
+                        case 2:
+                            m++;
+                            direct = 2;
+                            break;
+                        case 3:
+                            n--;
+                            direct = 1;
+                            break;
+                    }
+                    //MessageBox.Show("--m  "+m + "--n  " + n + "--pointX  " + pointX + "--pointY  " + pointY + "--direct  "+direct);
+
+                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[x, y] & direct) != 0 && path[m, n] == 0)//不为墙且未走过
+                    {
+                        path[x, y] = 1;
+                        map[x, y].Image = ImageList[numMap[x, y]];//将未被踩的贴到原位置
+                        map[m, n].Image = PathImageList[numMap[m, n]];//将已被踩的贴到新的位置
+
+                        x = m;
+                        y = n;
+
+                        status_lb_x.Text = "" + x;//打印坐标
+                        status_lb_y.Text = "" + y;
+
+                        if (m == height - 1 && n == width - 1)
+                        {
+                            MessageBox.Show("通过!");
+                        }
+
+                        PathfindingByOneStep(m, n);
+                        path[x, y] = 0;
+                        map[x, y].Image = ImageList[numMap[x, y]];//将未被踩的贴到原位置
+                    }
+                }
+
+
+    */
+            }
+
+            if (numMap != null)
+            {
+                for (int i = 0; i <= 3; i++)//上右下左
+                {
+                    int m = pointX;
+                    int n = pointY;
+                    int direct = 0;
+                    switch (i)
+                    {
+                        case 0:
+                            m--;
+                            direct = 8;
+                            break;
+                        case 1:
+                            n++;
+                            direct = 4;
+                            break;
+                        case 2:
+                            m++;
+                            direct = 2;
+                            break;
+                        case 3:
+                            n--;
+                            direct = 1;
+                            break;
+                    }
+                    //MessageBox.Show("--m  "+m + "--n  " + n + "--pointX  " + pointX + "--pointY  " + pointY + "--direct  "+direct);
+                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[pointX, pointY] & direct) != 0 && path[m, n] == 0)
+                    {
+                        searchStack.Push(new OneStepAttribute(pointX, pointY, i));//将原位置入栈
+
+                    }
+                }
+
+                if(!searchStack.StackEmpty())
+                {
+                    OneStepAttribute block = searchStack.GetTop();
+                    int m = pointX;
+                    int n = pointY;
+                    int direct = block.direct;
+                    switch (direct)
+                    {
+                        case 0:
+                            m--;
+                            direct = 8;
+                            break;
+                        case 1:
+                            n++;
+                            direct = 4;
+                            break;
+                        case 2:
+                            m++;
+                            direct = 2;
+                            break;
+                        case 3:
+                            n--;
+                            direct = 1;
+                            break;
+                    }
+                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[pointX, pointY] & direct) != 0)
+                    {
+                        path[pointX, pointY] = 1;
+                        map[pointX, pointY].Image = ImageList[numMap[pointX, pointY]];//将未被踩的贴到原位置
+                        map[m, n].Image = PathImageList[numMap[m, n]];//将已被踩的贴到新的位置
+
+                        pointX = m;
+                        pointY = n;
+
+                        status_lb_x.Text = "" + pointX;//打印坐标
+                        status_lb_y.Text = "" + pointY;
+
+                        if (m == height - 1 && n == width - 1)
+                        {
+                            isSearchOver = false;
+                            timer1.Enabled = false;
+                            MessageBox.Show("通过!");
+                            
+                        }
+                    }else if (m < height && n < width && m >= 0 && n >= 0&&(numMap[pointX, pointY] & direct) == 0)
+                    {
+                        path[pointX, pointY] = 1;
+
+                        OneStepAttribute blocks = searchStack.Pop();
+                        path[blocks.path_x, blocks.path_y] = 0;
+                        map[pointX, pointY].Image = ImageList[numMap[pointX, pointY]];//将未被踩的贴到原位置
+                        pointX = blocks.path_x;
+                        pointY = blocks.path_y;
+
+                        status_lb_x.Text = "" + pointX;//打印坐标
+                        status_lb_y.Text = "" + pointY;
+                        map[pointX, pointY].Image = PathImageList[numMap[pointX, pointY]];//将已被踩的贴到新的位置
+                        
+
+                        
+                    }
+                }
+                else
+                {
+                    timer1.Enabled = false;
+                    MessageBox.Show("意外栈空！");
+                    
+                }
+
+
+            }
+        }
         //按钮
         private void btn_test_Click(object sender, EventArgs e)
         {
@@ -429,9 +598,7 @@ namespace MazePro
 
         private void test_Click(object sender, EventArgs e)
         {
-            Checkered ch = new Checkered();
-            //pictureBox1.Image = ch.getCheckered_14();
-
+            timer1.Enabled = true;
         }
 
         private void sideLengthBar_Scroll(object sender, EventArgs e)
@@ -466,6 +633,11 @@ namespace MazePro
             }
             //清空栈记录
             stack.ClearStack();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            PathfindingByOneStep();
         }
     }
 }

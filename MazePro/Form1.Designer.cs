@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.winAndNewGame = new System.Windows.Forms.CheckBox();
             this.showLevel = new System.Windows.Forms.Label();
@@ -46,6 +47,7 @@
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapCreateProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.mazeBox = new System.Windows.Forms.GroupBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sideLengthBar)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -115,12 +117,12 @@
             // 
             // test
             // 
-            this.test.Location = new System.Drawing.Point(297, 98);
+            this.test.Location = new System.Drawing.Point(282, 90);
             this.test.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.test.Name = "test";
-            this.test.Size = new System.Drawing.Size(75, 22);
+            this.test.Size = new System.Drawing.Size(107, 34);
             this.test.TabIndex = 4;
-            this.test.Text = "test";
+            this.test.Text = "单步寻路";
             this.test.UseVisualStyleBackColor = true;
             this.test.Click += new System.EventHandler(this.test_Click);
             // 
@@ -221,12 +223,16 @@
             // mazeBox
             // 
             this.mazeBox.Location = new System.Drawing.Point(16, 12);
-            this.mazeBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mazeBox.Margin = new System.Windows.Forms.Padding(4);
             this.mazeBox.Name = "mazeBox";
-            this.mazeBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mazeBox.Padding = new System.Windows.Forms.Padding(4);
             this.mazeBox.Size = new System.Drawing.Size(561, 526);
             this.mazeBox.TabIndex = 4;
             this.mazeBox.TabStop = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
             // 
@@ -274,6 +280,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripProgressBar mapCreateProgressBar;
         private System.Windows.Forms.GroupBox mazeBox;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
