@@ -48,14 +48,21 @@
             this.mapCreateProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.mazeBox = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.stepSpeedBar = new System.Windows.Forms.TrackBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.stepLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sideLengthBar)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.stepLabel);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.stepSpeedBar);
             this.groupBox1.Controls.Add(this.winAndNewGame);
             this.groupBox1.Controls.Add(this.showLevel);
             this.groupBox1.Controls.Add(this.label1);
@@ -75,12 +82,12 @@
             // winAndNewGame
             // 
             this.winAndNewGame.AutoSize = true;
-            this.winAndNewGame.Location = new System.Drawing.Point(5, 142);
+            this.winAndNewGame.Location = new System.Drawing.Point(285, 65);
             this.winAndNewGame.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.winAndNewGame.Name = "winAndNewGame";
-            this.winAndNewGame.Size = new System.Drawing.Size(179, 19);
+            this.winAndNewGame.Size = new System.Drawing.Size(104, 34);
             this.winAndNewGame.TabIndex = 8;
-            this.winAndNewGame.Text = "通过后立即开始新游戏";
+            this.winAndNewGame.Text = "通过后立即\r\n开始新游戏";
             this.winAndNewGame.UseVisualStyleBackColor = true;
             // 
             // showLevel
@@ -117,7 +124,7 @@
             // 
             // test
             // 
-            this.test.Location = new System.Drawing.Point(282, 90);
+            this.test.Location = new System.Drawing.Point(170, 128);
             this.test.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.test.Name = "test";
             this.test.Size = new System.Drawing.Size(107, 34);
@@ -232,7 +239,37 @@
             // 
             // timer1
             // 
+            this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // stepSpeedBar
+            // 
+            this.stepSpeedBar.LargeChange = 1;
+            this.stepSpeedBar.Location = new System.Drawing.Point(6, 113);
+            this.stepSpeedBar.Maximum = 2;
+            this.stepSpeedBar.Name = "stepSpeedBar";
+            this.stepSpeedBar.Size = new System.Drawing.Size(150, 56);
+            this.stepSpeedBar.TabIndex = 1;
+            this.stepSpeedBar.Value = 1;
+            this.stepSpeedBar.Scroll += new System.EventHandler(this.stepSpeedBar_Scroll);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(46, 147);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "边长：";
+            // 
+            // stepLabel
+            // 
+            this.stepLabel.AutoSize = true;
+            this.stepLabel.Location = new System.Drawing.Point(94, 147);
+            this.stepLabel.Name = "stepLabel";
+            this.stepLabel.Size = new System.Drawing.Size(22, 15);
+            this.stepLabel.TabIndex = 10;
+            this.stepLabel.Text = "中";
             // 
             // MainForm
             // 
@@ -255,6 +292,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.sideLengthBar)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -281,6 +319,9 @@
         private System.Windows.Forms.ToolStripProgressBar mapCreateProgressBar;
         private System.Windows.Forms.GroupBox mazeBox;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label stepLabel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TrackBar stepSpeedBar;
     }
 }
 

@@ -326,62 +326,6 @@ namespace MazePro
             Thread.Sleep(100);
             if (numMap != null)
             {
-                /*
-                for (int i = 0; i <= 3; i++)//上右下左
-                {
-                    int m = x;
-                    int n = y;
-                    int direct = 0;
-                    switch (i)
-                    {
-                        case 0:
-                            m--;
-                            direct = 8;
-                            break;
-                        case 1:
-                            n++;
-                            direct = 4;
-                            break;
-                        case 2:
-                            m++;
-                            direct = 2;
-                            break;
-                        case 3:
-                            n--;
-                            direct = 1;
-                            break;
-                    }
-                    //MessageBox.Show("--m  "+m + "--n  " + n + "--pointX  " + pointX + "--pointY  " + pointY + "--direct  "+direct);
-
-                    if (m < height && n < width && m >= 0 && n >= 0 && (numMap[x, y] & direct) != 0 && path[m, n] == 0)//不为墙且未走过
-                    {
-                        path[x, y] = 1;
-                        map[x, y].Image = ImageList[numMap[x, y]];//将未被踩的贴到原位置
-                        map[m, n].Image = PathImageList[numMap[m, n]];//将已被踩的贴到新的位置
-
-                        x = m;
-                        y = n;
-
-                        status_lb_x.Text = "" + x;//打印坐标
-                        status_lb_y.Text = "" + y;
-
-                        if (m == height - 1 && n == width - 1)
-                        {
-                            MessageBox.Show("通过!");
-                        }
-
-                        PathfindingByOneStep(m, n);
-                        path[x, y] = 0;
-                        map[x, y].Image = ImageList[numMap[x, y]];//将未被踩的贴到原位置
-                    }
-                }
-
-
-    */
-            }
-
-            if (numMap != null)
-            {
                 for (int i = 0; i <= 3; i++)//上右下左
                 {
                     int m = pointX;
@@ -461,7 +405,6 @@ namespace MazePro
                     }else if (m < height && n < width && m >= 0 && n >= 0&&(numMap[pointX, pointY] & direct) == 0)
                     {
                         path[pointX, pointY] = 1;
-
                         OneStepAttribute blocks = searchStack.Pop();
                         path[blocks.path_x, blocks.path_y] = 0;
                         map[pointX, pointY].Image = ImageList[numMap[pointX, pointY]];//将未被踩的贴到原位置
@@ -471,19 +414,13 @@ namespace MazePro
                         status_lb_x.Text = "" + pointX;//打印坐标
                         status_lb_y.Text = "" + pointY;
                         map[pointX, pointY].Image = PathImageList[numMap[pointX, pointY]];//将已被踩的贴到新的位置
-                        
-
-                        
                     }
                 }
                 else
                 {
                     timer1.Enabled = false;
                     MessageBox.Show("意外栈空！");
-                    
                 }
-
-
             }
         }
         //按钮
@@ -638,6 +575,25 @@ namespace MazePro
         private void timer1_Tick(object sender, EventArgs e)
         {
             PathfindingByOneStep();
+        }
+
+        private void stepSpeedBar_Scroll(object sender, EventArgs e)
+        {
+            switch (stepSpeedBar.Value)
+            {
+                case 0:
+                    stepLabel.Text = "慢";
+                    timer1.Interval = 1000;
+                    break;
+                case 1:
+                    stepLabel.Text = "中";
+                    timer1.Interval = 500;
+                    break;
+                case 2:
+                    stepLabel.Text = "快";
+                    timer1.Interval = 100;
+                    break;
+            }
         }
     }
 }
