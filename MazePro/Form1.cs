@@ -583,11 +583,11 @@ namespace MazePro
             {
                 case 0:
                     stepLabel.Text = "慢";
-                    timer1.Interval = 1000;
+                    timer1.Interval = 600;
                     break;
                 case 1:
                     stepLabel.Text = "中";
-                    timer1.Interval = 500;
+                    timer1.Interval = 300;
                     break;
                 case 2:
                     stepLabel.Text = "快";

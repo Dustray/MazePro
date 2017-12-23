@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.stepLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.stepSpeedBar = new System.Windows.Forms.TrackBar();
             this.winAndNewGame = new System.Windows.Forms.CheckBox();
             this.showLevel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,13 +51,10 @@
             this.mapCreateProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.mazeBox = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.stepSpeedBar = new System.Windows.Forms.TrackBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.stepLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sideLengthBar)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -70,22 +70,54 @@
             this.groupBox1.Controls.Add(this.test);
             this.groupBox1.Controls.Add(this.btn_test);
             this.groupBox1.Controls.Add(this.btn_createMap);
-            this.groupBox1.Location = new System.Drawing.Point(584, 12);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Location = new System.Drawing.Point(438, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(395, 172);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(296, 138);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "配置";
             // 
+            // stepLabel
+            // 
+            this.stepLabel.AutoSize = true;
+            this.stepLabel.Location = new System.Drawing.Point(70, 118);
+            this.stepLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.stepLabel.Name = "stepLabel";
+            this.stepLabel.Size = new System.Drawing.Size(17, 12);
+            this.stepLabel.TabIndex = 10;
+            this.stepLabel.Text = "中";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(34, 118);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "速度：";
+            // 
+            // stepSpeedBar
+            // 
+            this.stepSpeedBar.LargeChange = 1;
+            this.stepSpeedBar.Location = new System.Drawing.Point(4, 90);
+            this.stepSpeedBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.stepSpeedBar.Maximum = 2;
+            this.stepSpeedBar.Name = "stepSpeedBar";
+            this.stepSpeedBar.Size = new System.Drawing.Size(112, 45);
+            this.stepSpeedBar.TabIndex = 1;
+            this.stepSpeedBar.Value = 1;
+            this.stepSpeedBar.Scroll += new System.EventHandler(this.stepSpeedBar_Scroll);
+            // 
             // winAndNewGame
             // 
             this.winAndNewGame.AutoSize = true;
-            this.winAndNewGame.Location = new System.Drawing.Point(285, 65);
-            this.winAndNewGame.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.winAndNewGame.Location = new System.Drawing.Point(214, 52);
+            this.winAndNewGame.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.winAndNewGame.Name = "winAndNewGame";
-            this.winAndNewGame.Size = new System.Drawing.Size(104, 34);
+            this.winAndNewGame.Size = new System.Drawing.Size(84, 28);
             this.winAndNewGame.TabIndex = 8;
             this.winAndNewGame.Text = "通过后立即\r\n开始新游戏";
             this.winAndNewGame.UseVisualStyleBackColor = true;
@@ -93,30 +125,32 @@
             // showLevel
             // 
             this.showLevel.AutoSize = true;
-            this.showLevel.Location = new System.Drawing.Point(153, 65);
+            this.showLevel.Location = new System.Drawing.Point(115, 52);
+            this.showLevel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.showLevel.Name = "showLevel";
-            this.showLevel.Size = new System.Drawing.Size(15, 15);
+            this.showLevel.Size = new System.Drawing.Size(11, 12);
             this.showLevel.TabIndex = 7;
             this.showLevel.Text = "2";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(104, 65);
+            this.label1.Location = new System.Drawing.Point(78, 52);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 15);
+            this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 6;
             this.label1.Text = "边长：";
             // 
             // sideLengthBar
             // 
             this.sideLengthBar.LargeChange = 4;
-            this.sideLengthBar.Location = new System.Drawing.Point(5, 24);
-            this.sideLengthBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.sideLengthBar.Location = new System.Drawing.Point(4, 19);
+            this.sideLengthBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.sideLengthBar.Maximum = 30;
             this.sideLengthBar.Minimum = 2;
             this.sideLengthBar.Name = "sideLengthBar";
-            this.sideLengthBar.Size = new System.Drawing.Size(269, 56);
+            this.sideLengthBar.Size = new System.Drawing.Size(202, 45);
             this.sideLengthBar.TabIndex = 4;
             this.sideLengthBar.TabStop = false;
             this.sideLengthBar.Value = 2;
@@ -124,10 +158,10 @@
             // 
             // test
             // 
-            this.test.Location = new System.Drawing.Point(170, 128);
-            this.test.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.test.Location = new System.Drawing.Point(128, 102);
+            this.test.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.test.Name = "test";
-            this.test.Size = new System.Drawing.Size(107, 34);
+            this.test.Size = new System.Drawing.Size(80, 27);
             this.test.TabIndex = 4;
             this.test.Text = "单步寻路";
             this.test.UseVisualStyleBackColor = true;
@@ -136,10 +170,10 @@
             // btn_test
             // 
             this.btn_test.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_test.Location = new System.Drawing.Point(283, 128);
-            this.btn_test.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_test.Location = new System.Drawing.Point(212, 102);
+            this.btn_test.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_test.Name = "btn_test";
-            this.btn_test.Size = new System.Drawing.Size(107, 34);
+            this.btn_test.Size = new System.Drawing.Size(80, 27);
             this.btn_test.TabIndex = 1;
             this.btn_test.Text = "寻路";
             this.btn_test.UseVisualStyleBackColor = true;
@@ -148,10 +182,10 @@
             // btn_createMap
             // 
             this.btn_createMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_createMap.Location = new System.Drawing.Point(283, 24);
-            this.btn_createMap.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_createMap.Location = new System.Drawing.Point(212, 19);
+            this.btn_createMap.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_createMap.Name = "btn_createMap";
-            this.btn_createMap.Size = new System.Drawing.Size(107, 34);
+            this.btn_createMap.Size = new System.Drawing.Size(80, 27);
             this.btn_createMap.TabIndex = 0;
             this.btn_createMap.Text = "创建迷宫";
             this.btn_createMap.UseVisualStyleBackColor = true;
@@ -161,11 +195,11 @@
             // 
             this.txt_str.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_str.Location = new System.Drawing.Point(584, 190);
-            this.txt_str.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_str.Location = new System.Drawing.Point(438, 152);
+            this.txt_str.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_str.Multiline = true;
             this.txt_str.Name = "txt_str";
-            this.txt_str.Size = new System.Drawing.Size(393, 348);
+            this.txt_str.Size = new System.Drawing.Size(296, 279);
             this.txt_str.TabIndex = 1;
             // 
             // statusStrip1
@@ -179,120 +213,89 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4,
             this.mapCreateProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 437);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 13, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(989, 26);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(743, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(84, 21);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel1.Text = "当前坐标：";
             // 
             // status_lb_x
             // 
             this.status_lb_x.Name = "status_lb_x";
-            this.status_lb_x.Size = new System.Drawing.Size(18, 21);
+            this.status_lb_x.Size = new System.Drawing.Size(15, 17);
             this.status_lb_x.Text = "0";
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(13, 21);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 17);
             this.toolStripStatusLabel2.Text = ":";
             // 
             // status_lb_y
             // 
             this.status_lb_y.Name = "status_lb_y";
-            this.status_lb_y.Size = new System.Drawing.Size(18, 21);
+            this.status_lb_y.Size = new System.Drawing.Size(15, 17);
             this.status_lb_y.Text = "0";
             // 
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(29, 21);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(27, 17);
             this.toolStripStatusLabel3.Text = "  |  ";
             // 
             // toolStripStatusLabel4
             // 
             this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(84, 21);
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusLabel4.Text = "当前状态：";
             // 
             // mapCreateProgressBar
             // 
             this.mapCreateProgressBar.Name = "mapCreateProgressBar";
-            this.mapCreateProgressBar.Size = new System.Drawing.Size(667, 20);
+            this.mapCreateProgressBar.Size = new System.Drawing.Size(500, 16);
             // 
             // mazeBox
             // 
-            this.mazeBox.Location = new System.Drawing.Point(16, 12);
-            this.mazeBox.Margin = new System.Windows.Forms.Padding(4);
+            this.mazeBox.Location = new System.Drawing.Point(12, 10);
             this.mazeBox.Name = "mazeBox";
-            this.mazeBox.Padding = new System.Windows.Forms.Padding(4);
-            this.mazeBox.Size = new System.Drawing.Size(561, 526);
+            this.mazeBox.Size = new System.Drawing.Size(421, 421);
             this.mazeBox.TabIndex = 4;
             this.mazeBox.TabStop = false;
             // 
             // timer1
             // 
-            this.timer1.Interval = 500;
+            this.timer1.Interval = 300;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // stepSpeedBar
-            // 
-            this.stepSpeedBar.LargeChange = 1;
-            this.stepSpeedBar.Location = new System.Drawing.Point(6, 113);
-            this.stepSpeedBar.Maximum = 2;
-            this.stepSpeedBar.Name = "stepSpeedBar";
-            this.stepSpeedBar.Size = new System.Drawing.Size(150, 56);
-            this.stepSpeedBar.TabIndex = 1;
-            this.stepSpeedBar.Value = 1;
-            this.stepSpeedBar.Scroll += new System.EventHandler(this.stepSpeedBar_Scroll);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(46, 147);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 15);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "边长：";
-            // 
-            // stepLabel
-            // 
-            this.stepLabel.AutoSize = true;
-            this.stepLabel.Location = new System.Drawing.Point(94, 147);
-            this.stepLabel.Name = "stepLabel";
-            this.stepLabel.Size = new System.Drawing.Size(22, 15);
-            this.stepLabel.TabIndex = 10;
-            this.stepLabel.Text = "中";
             // 
             // MainForm
             // 
             this.AcceptButton = this.btn_createMap;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(989, 566);
+            this.ClientSize = new System.Drawing.Size(743, 459);
             this.Controls.Add(this.mazeBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.txt_str);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.MaximumSize = new System.Drawing.Size(1007, 613);
-            this.MinimumSize = new System.Drawing.Size(1007, 613);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaximumSize = new System.Drawing.Size(759, 498);
+            this.MinimumSize = new System.Drawing.Size(759, 498);
             this.Name = "MainForm";
             this.Text = "迷宫";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sideLengthBar)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stepSpeedBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
