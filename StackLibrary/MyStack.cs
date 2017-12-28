@@ -13,6 +13,7 @@ namespace StackLibrary
         public int stackSize { get; set; }//栈个数
         public int topPointer { get; set; }//栈顶指针（数组最后元素位置）
         public int basePointer { get; set; }//栈底指针
+
         private T[] arrayList;//栈数组
 
         public MyStack()
